@@ -34,7 +34,7 @@ public class ParseJson : MonoBehaviour
         //Debug.Log("**Serial: " + ethernet.ethernet[0].serial);
 
         /* Capstone */
-        string json = File.ReadAllText(Application.dataPath + "/json1.json");
+        string json = File.ReadAllText(Application.dataPath + "/json2.json");
         Debug.Log(json);
 
         Topology loaded_data = JsonUtility.FromJson<Topology>(json);
@@ -47,6 +47,11 @@ public class ParseJson : MonoBehaviour
 
         Debug.Log("eth_client: " + loaded_data.eth_clients[0].clients[0].idle);
         Debug.Log("mesh_links: " + loaded_data.mesh_links[0].isMaster);
+
+        for (int i = 0; i < loaded_data.sta_clients[0].clients.Length; i++)
+        {
+            Debug.Log("sta_client: " + loaded_data.sta_clients[0].clients[i].txpr);
+        }
 
         /*  - Mesh Links */
 
@@ -79,33 +84,15 @@ public class ParseJson : MonoBehaviour
     private class Topology
     {
         public EthConnection[] eth_clients;    // eth_clients
-        //public StaConnection[] wifi;        // sta_clients
+        public StaConnection[] sta_clients;        // sta_clients
         public MeshLink[] mesh_links;       // mesh_links
     }
 
-    //[System.Serializable]
-    //private class EthClient
-    //{
-    //    public EthConnection[] clients;
-    //}
-
-    //[System.Serializable]
-    //private class StaClient
-    //{
-    //    public StaConnection[] sta_clients;
-    //}
+    [System.Serializable]
+    private class EthConnection : Connection<Eth> { }
 
     [System.Serializable]
-    private class EthConnection : Connection<Eth>
-    {
-
-    }
-
-    [System.Serializable]
-    private class StaConnection : Connection<Sta>
-    {
-
-    }
+    private class StaConnection : Connection<Sta> { }
 
     [System.Serializable]
     private class Connection<T>
@@ -123,7 +110,7 @@ public class ParseJson : MonoBehaviour
             'idle': '9.10',
             'target_mac': '00:40:ad:91:be:a0'
         */
-        public string idle;         // Made into string to store exact numbers; if double -> value = 9.1000000012
+        public string idle;         // Made into string to store exact numbers = "9.10" vs. if double -> value = 9.1000000012
         public string target_mac;
     }
 
