@@ -37,10 +37,18 @@ public class ParseJson : MonoBehaviour
         string json = File.ReadAllText(Application.dataPath + "/json1.json");
         Debug.Log(json);
 
-        Test loaded_player_data = JsonUtility.FromJson<Test>(json);
-        Debug.Log("Client - Idle: " + loaded_player_data.eth_clients[0].clients[0].idle);
+        Topology loaded_data = JsonUtility.FromJson<Topology>(json);
 
-        Debug.Log("Serial: " + loaded_player_data.eth_clients[0].serial);
+        /*  - Ethernet */
+        //EthClient loaded_player_data = JsonUtility.FromJson<EthClient>(json);
+        //Debug.Log("Client - Idle: " + loaded_data.eth_clients[0].clients[0].idle);
+        //Debug.Log("Client - TMac: " + loaded_data.eth_clients[0].clients[0].target_mac);
+        //Debug.Log("Serial: " + loaded_data.eth_clients[0].serial);
+
+        Debug.Log("eth_client: " + loaded_data.eth_clients[0].clients[0].idle);
+        Debug.Log("mesh_links: " + loaded_data.mesh_links[0].isMaster);
+
+        /*  - Mesh Links */
 
 
         /* Test JSON */
@@ -52,6 +60,7 @@ public class ParseJson : MonoBehaviour
         //Debug.Log("Pos: " + loaded_player_data.data[0].position[0]);
     }
 
+    /* Testing Classes */
     [System.Serializable]
     private class PlayerData
     {
@@ -64,15 +73,36 @@ public class ParseJson : MonoBehaviour
         public Vector3[] position;
         public int health;
     }
+    /********************/
 
     [System.Serializable]
-    private class Test
+    private class Topology
     {
-        public EthConnection[] eth_clients;
+        public EthConnection[] eth_clients;    // eth_clients
+        //public StaConnection[] wifi;        // sta_clients
+        public MeshLink[] mesh_links;       // mesh_links
     }
+
+    //[System.Serializable]
+    //private class EthClient
+    //{
+    //    public EthConnection[] clients;
+    //}
+
+    //[System.Serializable]
+    //private class StaClient
+    //{
+    //    public StaConnection[] sta_clients;
+    //}
 
     [System.Serializable]
     private class EthConnection : Connection<Eth>
+    {
+
+    }
+
+    [System.Serializable]
+    private class StaConnection : Connection<Sta>
     {
 
     }
@@ -83,22 +113,6 @@ public class ParseJson : MonoBehaviour
         public T[] clients;
         public string serial;
     }
-
-    [System.Serializable]
-    private class Topology
-    {
-        public Connection<Eth>[] ethernet;    // eth_clients
-        public Connection<Sta>[] wifi;        // sta_clients
-        public MeshLink[] mesh_links;       // mesh_links
-    }
-
-
-    //[System.Serializable]
-    //private class Connection<T>
-    //{
-    //    public T[] clients;
-    //    public string serial;
-    //}
 
     // JSON Objects
     [System.Serializable]
@@ -116,11 +130,9 @@ public class ParseJson : MonoBehaviour
     [System.Serializable]
     private class MeshLink
     {
-        public Device[] device;         // connected_to
-        public bool is_master;
+        public Device[] connected_to;         // connected_to
+        public bool isMaster;
         public string serial;
-
-
     }
 
     [System.Serializable]
