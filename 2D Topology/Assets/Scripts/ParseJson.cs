@@ -9,8 +9,6 @@ public class ParseJson : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("Hello" + " world");
-
         //PlayerData player_data = new PlayerData();
         //player_data.position = new Vector3(5, 0);
         //player_data.health = 70;
@@ -26,12 +24,7 @@ public class ParseJson : MonoBehaviour
         File.WriteAllText(Application.dataPath + "/saveFile.json", json);
         */
 
-        // Read from File
-        //string json = File.ReadAllText(Application.dataPath + "/saveFile.json");
-        //Debug.Log(json);
-
-        //Test ethernet = JsonUtility.FromJson<Test>(json);
-        //Debug.Log("**Serial: " + ethernet.ethernet[0].serial);
+        Debug.Log("Parsing JSON");
 
         /* Capstone */
         string json = File.ReadAllText(Application.dataPath + "/json2.json");
@@ -65,19 +58,19 @@ public class ParseJson : MonoBehaviour
         //Debug.Log("Pos: " + loaded_player_data.data[0].position[0]);
     }
 
-    /* Testing Classes */
-    [System.Serializable]
-    private class PlayerData
-    {
-        public Data[] data;
-    }
+    /* Testing Classes - For JSON  */
+    //[System.Serializable]
+    //private class PlayerData
+    //{
+    //    public Data[] data;
+    //}
 
-    [System.Serializable]
-    private class Data
-    {
-        public Vector3[] position;
-        public int health;
-    }
+    //[System.Serializable]
+    //private class Data
+    //{
+    //    public Vector3[] position;
+    //    public int health;
+    //}
     /********************/
 
     [System.Serializable]
