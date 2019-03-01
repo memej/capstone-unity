@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,21 +33,84 @@ public class ParseJson : MonoBehaviour
         Topology loaded_data = JsonUtility.FromJson<Topology>(json);
 
         /*  - Ethernet */
-        //EthClient loaded_player_data = JsonUtility.FromJson<EthClient>(json);
-        //Debug.Log("Client - Idle: " + loaded_data.eth_clients[0].clients[0].idle);
-        //Debug.Log("Client - TMac: " + loaded_data.eth_clients[0].clients[0].target_mac);
-        //Debug.Log("Serial: " + loaded_data.eth_clients[0].serial);
+        Debug.Log("Extracting: Ethernet Clients");
 
-        Debug.Log("eth_client: " + loaded_data.eth_clients[0].clients[0].idle);
-        Debug.Log("mesh_links: " + loaded_data.mesh_links[0].isMaster);
-
-        for (int i = 0; i < loaded_data.sta_clients[0].clients.Length; i++)
+        EthConnection[] eth_clients = loaded_data.eth_clients;
+        for (int i = 0; i < eth_clients.Length; ++i)
         {
-            Debug.Log("sta_client: " + loaded_data.sta_clients[0].clients[i].txpr);
+            // eth_client
+            EthConnection eth_client = eth_clients[i];
+            string serial = eth_client.serial;
+
+            //  - clients[]
+            //      - idle
+            //      - target_mac
+            for (int j = 0; j < eth_client.clients.Length; ++j)
+            {
+                Eth curr_client = eth_client.clients[j];
+                string idle = curr_client.idle;
+                string target_mac = curr_client.target_mac;
+
+                Debug.Log(i + "." + j + ") " + "Idle: " + idle + " | target_mac: " + target_mac);
+            }
+
+            //  - serial
+            Debug.Log(i + ") " + "Serial: " + serial);
         }
 
         /*  - Mesh Links */
+        Debug.Log("Extracting: Mesh Links");
 
+        MeshLink[] mesh_links = loaded_data.mesh_links;
+        for (int i = 0; i < mesh_links.Length; ++i)
+        {
+            // mesh_link
+            MeshLink mesh_link = mesh_links[i];
+            bool is_master = mesh_link.isMaster;
+            string main_serial = mesh_link.serial;
+
+            //  - connected_to[]
+            //      - rssi
+            //      - serial
+            for (int j = 0; j < mesh_link.connected_to.Length; ++j)
+            {
+                Device curr_device = mesh_link.connected_to[j];
+                int rssi = curr_device.rssi;
+                string serial = curr_device.serial;
+
+                Debug.Log(i + "." + j + ") " + "rssi: " + rssi + " | target_mac: " + serial);
+            }
+
+            //  - isMaster
+            //  - serial (mesh_link object / main)
+            Debug.Log(i + ") " + "isMaster: " + is_master + " | serial: " + main_serial);
+        }
+
+        /*  - Sta (Wireless) */
+        Debug.Log("Extracting: Sta Clients");
+
+        StaConnection[] sta_clients = loaded_data.sta_clients;
+        for (int i = 0; i < loaded_data.sta_clients.Length; i++)
+        {
+            // sta_client
+            StaConnection sta_client = sta_clients[i];
+            string main_serial = sta_client.serial;
+
+            //  - clients[]
+            for (int j = 0; j < sta_client.clients.Length; ++j)
+            {
+                Sta curr_client = sta_client.clients[j];
+                int rssi = curr_client.rssi;
+                int rxpr = curr_client.rxpr;
+                string target_mac = curr_client.target_mac;
+                int txpr = curr_client.txpr;
+
+                Debug.Log(i + "." + j + ") " + "rssi: " + rssi + " | rxpr: " + rxpr + " | target_mac: " + target_mac + " | txpr: " + txpr);
+            }
+
+            //  - serial (mesh_link object / main)
+            Debug.Log(i + ") " + "serial: " + main_serial);
+        }
 
         /* Test JSON */
         //string json = File.ReadAllText(Application.dataPath + "/saveFile.json");
