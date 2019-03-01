@@ -9,20 +9,6 @@ public class ParseJson : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //PlayerData player_data = new PlayerData();
-        //player_data.position = new Vector3(5, 0);
-        //player_data.health = 70;
-
-
-        // Convert to JSON
-        //string json = JsonUtility.ToJson(player_data);
-        //Debug.Log(json);
-
-
-        /*
-        // Write to File
-        File.WriteAllText(Application.dataPath + "/saveFile.json", json);
-        */
 
         Debug.Log("Parsing JSON");
 
